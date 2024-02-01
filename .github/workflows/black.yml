@@ -7,6 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: datadog/action-py-black-formatter@v2.5
+      - uses: datadog/action-py-black-formatter@v2.4
         with:
           check_mode: "true"
