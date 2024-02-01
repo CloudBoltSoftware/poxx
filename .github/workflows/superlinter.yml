@@ -3,7 +3,7 @@ on:
   pull_request:
 jobs:
   linter_name:
-    name: Black Formatter
+    name: Super-linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
