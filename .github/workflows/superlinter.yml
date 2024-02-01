@@ -1,6 +1,8 @@
 name: SuperLinter
 on:
   pull_request:
+  push:
+    - main
 jobs:
   linter_name:
     name: Super-linter
