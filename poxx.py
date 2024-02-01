@@ -19,17 +19,16 @@ This code is in the public domain.
 import optparse
 import os.path
 import re
-import polib    # from http://bitbucket.org/izi/polib
+import polib  # from http://bitbucket.org/izi/polib
 from html.parser import HTMLParser
 
-VERSION_STR = '2.0.0'
+VERSION_STR = "2.0.0"
 
 
 class HtmlAwareMessageMunger(HTMLParser):
-
     # Lifted from http://translate.sourceforge.net
-    ORIGINAL = u"ABCDEFGHIJKLMNOPQRSTUVWXYZ" + u"abcdefghijklmnopqrstuvwxyz"
-    REWRITE_UNICODE_MAP = u"ȦƁƇḒḖƑƓĦĪĴĶĿḾȠǾƤɊŘŞŦŬṼẆẊẎẐ" + u"ȧƀƈḓḗƒɠħīĵķŀḿƞǿƥɋřşŧŭṽẇẋẏẑ"
+    ORIGINAL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz"
+    REWRITE_UNICODE_MAP = "ȦƁƇḒḖƑƓĦĪĴĶĿḾȠǾƤɊŘŞŦŬṼẆẊẎẐ" + "ȧƀƈḓḗƒɠħīĵķŀḿƞǿƥɋřşŧŭṽẇẋẏẑ"
 
     PLACEHOLDER_REGEX = re.compile(
         r"((?:%(?:\(\w+\))?[-+]?[\d.]*[sfd])|(?:\{\w+[:]?[\d.]*[sfd]?\}))"
@@ -43,7 +42,6 @@ class HtmlAwareMessageMunger(HTMLParser):
         return self.s
 
     def xform(self, s):
-
         # return re.sub("[aeiouAEIOU]", self.munge_vowel, s)
         return re.sub("[A-Za-z]", self.munge_unicode, s)
 
@@ -64,7 +62,7 @@ class HtmlAwareMessageMunger(HTMLParser):
             self.s += " "
             self.s += name
             self.s += '="'
-            if name in ['alt', 'title']:
+            if name in ["alt", "title"]:
                 self.s += self.xform(val)
             else:
                 if val is None:
@@ -102,7 +100,7 @@ def _get_canonical_value(canonical_po, msgid):
     if canonical_po is None:
         return None
     canonical_entry = canonical_po.find(msgid)
-    return getattr(canonical_entry, 'msgstr', None)
+    return getattr(canonical_entry, "msgstr", None)
 
 
 def munge_one_file(fname, blank, canon_name=None):
@@ -116,14 +114,14 @@ def munge_one_file(fname, blank, canon_name=None):
         if canonical_value:
             entry.msgstr = canonical_value
         elif blank:
-            entry.msgstr = ''
+            entry.msgstr = ""
         else:
             hamm = HtmlAwareMessageMunger()
             hamm.feed(entry.msgid)
             entry.msgstr = hamm.result()
 
-            if 'fuzzy' in entry.flags:
-                entry.flags.remove('fuzzy')  # clear the fuzzy flag
+            if "fuzzy" in entry.flags:
+                entry.flags.remove("fuzzy")  # clear the fuzzy flag
         count += 1
 
     po.save()
@@ -140,49 +138,60 @@ def diff_one_file(fname, canon_name):
     # msgids in the def. po file with no cananonical definition are
     # marked as obsolute after a merge
     for entry in po.obsolete_entries():
-        entry.msgstr = ''
+        entry.msgstr = ""
         entry.obsolete = False
         diff_po.append(entry)
 
     # Add any msgids that are untranslated in the
     # canonical catalog as well
     for entry in canonical_po.untranslated_entries():
-        entry.msgstr = ''
+        entry.msgstr = ""
         diff_po.append(entry)
 
     full_fname_path = os.path.abspath(fname)
     fname_dir = os.path.dirname(full_fname_path)
-    fname_name = os.path.basename(full_fname_path).replace('.po', '')  # no extension
-    diff_po_path = os.path.join(fname_dir, '%s_diff.po' % fname_name)
+    fname_name = os.path.basename(full_fname_path).replace(".po", "")  # no extension
+    diff_po_path = os.path.join(fname_dir, "%s_diff.po" % fname_name)
     diff_po.save(diff_po_path)
     return "Created %s with %s translations" % (diff_po_path, len(diff_po))
 
 
 if __name__ == "__main__":
     p = optparse.OptionParser(
-        usage='%prog <po_file> [<another_po_file, ..] [-d] [-c] [-b]',
-        version='%prog ' + VERSION_STR)
+        usage="%prog <po_file> [<another_po_file, ..] [-d] [-c] [-b]",
+        version="%prog " + VERSION_STR,
+    )
 
-    p.add_option('--canonical', '-c',
-        help="replace msgids from canonical .po file",
-        dest='canonical_po_file')
     p.add_option(
-        '--diff', '-d',
-        action='store_true',
-        dest='diff',
-        help='create a po file with msgids not translated in canonical po file')
-    p.add_option('--blank', '-b',
+        "--canonical",
+        "-c",
+        help="replace msgids from canonical .po file",
+        dest="canonical_po_file",
+    )
+    p.add_option(
+        "--diff",
+        "-d",
+        action="store_true",
+        dest="diff",
+        help="create a po file with msgids not translated in canonical po file",
+    )
+    p.add_option(
+        "--blank",
+        "-b",
         help="mark as untranslated where a msgstr would be munged",
-        action='store_true',
-        dest='blank')
+        action="store_true",
+        dest="blank",
+    )
 
     options, po_files = p.parse_args()
 
     for fname in po_files:
         if options.diff and not options.canonical_po_file:
-            raise ValueError('--canonical is required when creating a diff')
+            raise ValueError("--canonical is required when creating a diff")
 
         if options.diff:
             report_msg = diff_one_file(fname, options.canonical_po_file)
         else:
-            report_msg = munge_one_file(fname, options.blank, canon_name=options.canonical_po_file)
+            report_msg = munge_one_file(
+                fname, options.blank, canon_name=options.canonical_po_file
+            )
