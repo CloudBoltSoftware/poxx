@@ -1,0 +1,54 @@
+name: Build, Test, and Release
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build, Test, and Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5.0.0
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest wheel
+
+      - name: Set VERSION
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+      - name: Set VERSION
+        if: ${{ github.event_name != 'release' }}
+        run: |
+          echo "VERSION='0.0.1-patch'" >> $GITHUB_ENV
+
+      - name: Build the package
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Run Tests
+        run: |
+          pytest
+
+      # Create Release using GitHub CLI
+      - name: Create Release
+        if: github.event_name == 'release' && github.event.action == 'created'
+        run: |
+          gh release upload ${{ github.ref_name }} dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
