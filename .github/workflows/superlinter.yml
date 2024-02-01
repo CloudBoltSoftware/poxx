@@ -1,4 +1,4 @@
-name: black-action
+name: SuperLinter
 on:
   pull_request:
 jobs:
@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Super-linter
-        uses: super-linter/super-linter@v6.0.0  # x-release-please-version
+        uses: super-linter/super-linter/slim@v6.0.0
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
