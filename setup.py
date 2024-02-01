@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import os
 
 version = os.environ.get('VERSION', '0.0.0').split('.')
 VERSION_STR = '.'.join(str(v) for v in version.split('.'))
