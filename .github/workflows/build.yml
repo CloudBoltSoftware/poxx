@@ -25,6 +25,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt # Assuming you have a requirements.txt; otherwise directly install 'polib' and other dependencies
           pip install pytest # If you're using pytest for testing
+          pip install wheel
 
       - name: Build the package
         run: |
