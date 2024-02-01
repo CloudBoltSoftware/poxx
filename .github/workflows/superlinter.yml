@@ -1,0 +1,17 @@
+name: SuperLinter
+on:
+  pull_request:
+  push:
+    - main
+jobs:
+  linter_name:
+    name: Super-linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Super-linter
+        uses: super-linter/super-linter/slim@v6.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_PYTHON_BLACK: true
+          VALIDATE_ALL_CODEBASE: false
