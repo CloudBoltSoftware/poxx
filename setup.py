@@ -1,8 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = os.environ.get('VERSION', '0.0.0').split('.')
-VERSION_STR = '.'.join(str(v) for v in version.split('.'))
+version = os.environ.get('VERSION', '0.0.0')
 
 install_requires = [
     'polib',
@@ -14,7 +13,7 @@ extras_require = {
 
 setup(
     name='poxx',
-    version=VERSION_STR,
+    version=version,
     author='Ned Batchelder, Package by Jacob Burch, Forked by CloudBolt Software, Inc.',
     author_email='dmenedez@cloudbolt.io',
     url='https://github.com/cloudboltsoftware/poxx',
