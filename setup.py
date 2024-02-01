@@ -1,36 +1,35 @@
 from setuptools import setup, find_packages
 import os
 
-version = os.environ.get('VERSION', '0.0.0')
+version = os.environ.get("VERSION", "0.0.0")
 
 install_requires = [
-    'polib',
+    "polib",
 ]
 
 extras_require = {
-    'test': ['pytest'],
+    "test": ["pytest"],
 }
 
 setup(
-    name='poxx',
+    name="poxx",
     version=version,
-    author='Ned Batchelder, Package by Jacob Burch, Forked by CloudBolt Software, Inc.',
-    author_email='dmenedez@cloudbolt.io',
-    url='https://github.com/cloudboltsoftware/poxx',
-    description='Faked translations',
+    author="Ned Batchelder, Package by Jacob Burch, Forked by CloudBolt Software, Inc.",
+    author_email="dmenedez@cloudbolt.io",
+    url="https://github.com/cloudboltsoftware/poxx",
+    description="Faked translations",
     long_description=__doc__,
     packages=find_packages(),
     zip_safe=False,
     install_requires=install_requires,
     extras_require=extras_require,  # Use extras_require for test dependencies
-    license='BSD',
+    license="BSD",
     include_package_data=True,
-    scripts=['poxx.py'],
+    scripts=["poxx.py"],
     classifiers=[
-        'Intended Audience :: Developers',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.9',
+        "Intended Audience :: Developers",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.9",
     ],
-    python_requires='>=3.6',  # Specify your Python compatibility
+    python_requires=">=3.6",  # Specify your Python compatibility
 )
-
