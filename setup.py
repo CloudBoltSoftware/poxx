@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = (1, 1, 1)
+version = (1, 1, 2)
 VERSION_STR = '.'.join(str(v) for v in version)  # Use version tuple here
 
 install_requires = [
@@ -14,9 +14,9 @@ extras_require = {
 setup(
     name='poxx',
     version=VERSION_STR,
-    author='Ned Batchelder, Package by Jacob Burch',
-    author_email='jacobburch@revsys.com',
-    url='http://github.com/jacobb/poxx',
+    author='Ned Batchelder, Package by Jacob Burch, Forked by CloudBolt Software, Inc.',
+    author_email='dmenedez@cloudbolt.io',
+    url='https://github.com/cloudboltsoftware/poxx',
     description='Faked translations',
     long_description=__doc__,
     packages=find_packages(),
