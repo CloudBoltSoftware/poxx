@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
-version = (1, 1, 2)
-VERSION_STR = '.'.join(str(v) for v in version)  # Use version tuple here
+version = os.environ.get('VERSION', '0.0.0').split('.')
+VERSION_STR = '.'.join(str(v) for v in version.split('.'))
 
 install_requires = [
     'polib',
